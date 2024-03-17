@@ -1,3 +1,5 @@
+// Pgm to Classify Identifier And Keyword
+
 %{
 #include<stdio.h>
 %}
@@ -19,6 +21,6 @@ switch               {     printf(" %s is a keyword\n",yytext);
 			 }
 %%
 int main(){
-	printf("Enter a cahracter/word. \n");
+	printf("Enter a character/word. \n");
 	yylex();
 } 
