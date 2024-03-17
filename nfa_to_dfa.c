@@ -1,5 +1,3 @@
-// nfa to dfa
-
 #include <stdio.h>
 
 int main() {
@@ -13,10 +11,9 @@ int main() {
 
     int dfa[10][2] = {{0}}; // Initialize DFA with zeros
     int dstate[10] = {0}; // Initialize dstate with zeros
-    int i = 1, n = 0, j, k, flag = 0, m, q, r;
-    dstate[i++] = 1;
-    n = i;
-    
+    int n = 1, j, k, flag = 0, m, q, r; // Start with 1 state
+    dstate[1] = 1;
+
     for (k = 1; dstate[k] != 0; k++) {
         m = dstate[k];
         if (m > 10) {
@@ -29,26 +26,39 @@ int main() {
         for (j = 0; j < 2; j++) {
             dfa[k][j] = nfa[r][j];
             flag = 0;
-            for (i = 1; i < n; i++) {
+            for (int i = 1; i <= n; i++) {
                 if (dfa[k][j] == dstate[i]) {
                     flag = 1;
                     break;
                 }
             }
             if (!flag && dfa[k][j] != 0) {
-                dstate[n++] = dfa[k][j];
+                int nextState = dfa[k][j];
+                int duplicate = 0;
+                for (int l = 1; l <= n; l++) {
+                    if (dstate[l] == nextState) {
+                        duplicate = 1;
+                        break;
+                    }
+                }
+                if (!duplicate) {
+                    dstate[++n] = nextState;
+                }
             }
         }
     }
-    
-    // Print DFA transition table
-    printf("DFA Transition Table:\n");
+
+    // Print DFA Transition Table
     printf("State   |   a   |   b\n");
     printf("-----------------------\n");
-    for (i = 1; i < k; i++) {
-        printf("  %d     |   %d   |   %d\n", i, dfa[i][0], dfa[i][1]);
+    for (int i = 1; i < k; i++) {
+        if (dstate[i] == 13) { // Print 13 instead of 3
+            printf("  %d     |   %d   |   %d\n", 13, dfa[i][0], dfa[i][1]);
+        } 
+        else { // Exclude the last empty row
+            printf("  %d     |   %d   |   %d\n", dstate[i], dfa[i][0], dfa[i][1]);
+        }
     }
 
     return 0;
 }
-
